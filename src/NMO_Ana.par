@@ -1,0 +1,26 @@
+********************************
+**** 1 input CMP file name
+../data/record.dat
+**** 2 output Theta-T Domain file name
+../file_DataBased/seis_theta_t.dat
+**** 3 output RadonSpectrum file name
+../file/record_Spec_Group_LASSO
+**** 4 fn_tvpairs
+../file/record_tvpairs
+**** 5  nt  dt
+8000 0.0005
+**** 6 nx offsetmin doffset
+101 0.00 13
+**** 7 nv vmin dv
+300 500 50
+**** 8 freq_max
+70
+**** 9 taper_length
+8
+**** 10 perc_under perc_over
+1 1
+**** 11 Num of thread
+8
+************** end ***************************
+
+
