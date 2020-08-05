@@ -119,7 +119,8 @@ int main()
         {
             for (int ivz = 0; ivz < ref_location(ir, ivx) / dz; ivz++)
             {
-                ref_location_t0(ir, ivx) = ref_location_t0(ir, ivx) + dz * 1.0 / model(ivz, ivx);
+                ref_location_t0(ir, ivx) = ref_location_t0(ir, ivx) +
+                    dz * 1.0 / model(ivz, ivx);
             }
         }
     }
@@ -165,11 +166,11 @@ int main()
     cout << "     Dt    : " << dt << " s" << endl;
     cout << "     Dx    : " << dx << " m" << endl;
     cout << "     Dz    : " << dz << " m" << endl;
-    cout << "======================================================================" << endl;
+    cout << "=========================================================" << endl;
     for (int ivx = 0; ivx < 1; ivx++)
     {
 
-        //=============================道集合成===============================//
+        //====================道集合成========================//
         cout << "--------------------------------------------------" << endl;
         cout << "Synthesize the Seismic Sections : " << endl;
         cout << "     Synthesize the CMP Section" << endl;
@@ -178,8 +179,8 @@ int main()
         arma::Mat<float> seis_xt(nt, nx, fill::zeros);
 
         //generate_cmpgathers_func(seis_xt, v_rms_col,
-                //wavelet, nw,
-                //nx, nt, dx, dt , t0);
+        //wavelet, nw,
+        //nx, nt, dx, dt , t0);
 
         arma::Col<float> model_col=model.col(ivx);
         generate_cmpgathers_modelbased_func(seis_xt, v_rms_col,
@@ -201,17 +202,17 @@ int main()
         arma::Mat<float> seis_thetat_modelbased(nt, nx, fill::zeros);
 
         generate_thetatgathers_modelbased_func(seis_thetat_modelbased,
-        model_col,
-        wavelet,  nw,
-        dz, nvz, d_theta,
-        n_theta, nt, dt);
+                model_col,
+                wavelet,  nw,
+                dz, nvz, d_theta,
+                n_theta, nt, dt);
 
         //generate_thetatgathers_func(seis_thetat_modelbased, v_rms_col,
-                //wavelet, nw,
-                //nx, nt,  dx, dt , t0, h);
+        //wavelet, nw,
+        //nx, nt,  dx, dt , t0, h);
         cout << "--------------------------------------------------" << endl;
 
-        //=======================零偏移集合成=================================//
+        //======================零偏移合成===================//
         cout << "--------------------------------------------------" << endl;
         cout << "     Synthesize the Zero_Offset Section" << endl;
         //零偏移距剖面zero_off_CMP
@@ -235,24 +236,34 @@ int main()
 
         cout << "--------------------------------------------------" << endl;
 
-        //=========================================================================//
-        //                              动校正（NMO）                              //
-        //=========================================================================//
+        //====================================================================//
+        //                              动校正（NMO）                         //
+        //====================================================================//
         cout << "--------------------------------------------------" << endl;
         cout << "NMO : " << endl;
         cout << "     NMO Correction of X-T Domain" << endl;
 
-        //===================时间-空间域（CMP）动校正=========================//
+        //=====================X-T域（CMP）动校正=========================//
         arma::Mat<float> seis_xt_after_nmo(nt, nx, fill::zeros);
         xt_nmo_func(seis_xt,seis_xt_after_nmo,
-                v_rms_col,  nx,  nt,  dx,  dt);
+        v_rms_col,  nx,  nt,  dx,  dt);
+
+        //xt_nmo_thetatbased_func( seis_xt,seis_xt_after_nmo,
+                //v_rms_col, nx, nt, dx, dt);
+        //转为ThetaT域进行对比分析
+        arma::Mat<float> seis_thetat_after_nmo_basedxtnmo(nt,n_theta,fill::zeros);
+
+        //xt_to_thetat_func(seis_xt_after_nmo, seis_thetat_after_nmo_basedxtnmo,
+        //v_rms_col,
+        //nx,  nt, dx, dz, dt);
+        //seis_thetat_after_nmo_basedxtnmo.save("../file/seis_theta_t_after_nmo_basedxtnmo.dat",raw_binary);
 
         //op2
         arma::Mat<float> seis_xt_op2 = seis_xt_after_nmo - zero_off;
 
 
         cout << "       NMO Correction of T-Theta Domain" << endl;
-        //====================时间-角度域动校正================================//
+        //====================Theta-T域动校正=============================//
         arma::Mat<float> seis_thetat_after_nmo(nt, n_theta, fill::zeros);
         thetat_nmo_func(seis_thetat,seis_thetat_after_nmo,
                 v_rms_col,
@@ -272,7 +283,7 @@ int main()
         arma::Mat<float> seis_x_theta_xt_after_nmo(nt, nx, fill::zeros);
         arma::Mat<float> seis_xt_mappedfromthetat(nt, nx, fill::zeros);
 
-        thetat_to_xt_func(seis_thetat_modelbased, seis_xt_mappedfromthetat,
+        thetat_to_xt_func(seis_thetat, seis_xt_mappedfromthetat,
                 v_rms_col,
                 nx, n_theta, nt, dx, d_theta, dz, dt);
 
@@ -281,9 +292,9 @@ int main()
                 nx, n_theta, nt, dx, d_theta, dz, dt);
 
 
-        //=========================================================================//
-        //                              叠加成像                                   //
-        //=========================================================================//
+        //====================================================================//
+        //                              叠加成像                              //
+        //====================================================================//
         //seis_thetat_stack :叠加数据   第一道表示零偏移距数据（即真实地震数据）
         //                              第二道表示叠加后数据
         //                              第三道为前两道相减
@@ -324,9 +335,9 @@ int main()
 
         cout << "--------------------------------------------------" << endl;
 
-        //=========================================================================//
-        //                              频谱分析                                   //
-        //=========================================================================//
+        //====================================================================//
+        //                              频谱分析                              //
+        //====================================================================//
         cout << "--------------------------------------------------" << endl;
         cout << "Here We Begin to Do the Fourier-Transform" << endl;
 
@@ -352,9 +363,9 @@ int main()
         cout << "--------------------------------------------------" << endl;
 
 
-        //=========================================================================//
-        //                              文件保存                                   //
-        //=========================================================================//
+        //====================================================================//
+        //                              文件保存                              //
+        //====================================================================//
         cout << "--------------------------------------------------" << endl;
         cout << "Save Files" << endl;
 
@@ -430,7 +441,8 @@ int main()
     string fn_seis_thetat_stack_all = fn + "seis_theta_t_stack_all.dat";
     seis_thetat_stack_all.save(fn_seis_thetat_stack_all, raw_binary);
 
-    cout << "======================================================================" << endl;
+
+    cout << "=========================================================" << endl;
 
     cout << "--------------------------------------------------" << endl;
     cout << "FINISH" << endl;

@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------//
 //程序目的： 1、X-T NMO
 //           2、THeta-T NMO
+//           3、X_T域数据在Theta_T域进行NMO并返回到XT域
 //
 //程序原理：
 //
@@ -93,6 +94,11 @@ int thetat_nmo_func( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat
         int nx, int n_theta, int nt,
         float dx, float d_theta, float dt)
 {
+    //Theta-T域NMO
+    //参数说明：
+    //      t_thetat_norm ：按照时距关系公式计算的每一点的时间
+    //      t_thetat_nmo  ：动校正量
+    //      seis_thetat_after_nmo：动校正后的剖面
 
     arma::Mat<float> t_thetat_norm(nt, n_theta, fill::zeros);
     arma::Mat<float> t_thetat_nmo(nt, n_theta, fill::zeros);
@@ -108,7 +114,9 @@ int thetat_nmo_func( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat
             {
                 float h_temp = v * it * dt / 2;
                 float t0_temp = it * dt;
-                float t = sqrt(t0_temp * t0_temp + 4.0 * h_temp * h_temp * sin(theta) * sin(theta) * 1.0 / v * 1.0 / v * 1.0 / cos(theta) * 1.0 / cos(theta));
+                float t = sqrt(t0_temp * t0_temp + 4.0 * h_temp * h_temp
+                        * sin(theta) * sin(theta) * 1.0 / v * 1.0 / v
+                        * 1.0 / cos(theta) * 1.0 / cos(theta));
 
                 if (int(t * 1.0 / dt) < nt)
                 {
@@ -124,7 +132,7 @@ int thetat_nmo_func( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat
         for (int it = 0; it < nt; it++)
         {
             float v=v_rms(it);
-            float theta = (ix - (nx - 1) / 2) * d_theta;
+            float theta = (ix - (n_theta - 1) / 2) * d_theta;
             float theta_max_here = atan(((nx - 1) / 2) * dx * 1.0 / (it * dt * v / 2));
             if (abs(theta) < theta_max_here)
             {
@@ -138,7 +146,8 @@ int thetat_nmo_func( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat
                 //cout<<it_ori<<endl;
                 if (it_ori + 1 < nt)
                 {
-                    seis_thetat_after_nmo(it, ix) = b * seis_thetat(it_ori, ix) + a * seis_thetat(it_ori + 1, ix);
+                    seis_thetat_after_nmo(it, ix) = b * seis_thetat(it_ori, ix)
+                        + a * seis_thetat(it_ori + 1, ix);
                 }
             }
         }
@@ -149,6 +158,116 @@ int thetat_nmo_func( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat
 }
 
 
+
+
+int xt_nmo_thetatbased_func( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo,
+        arma::Col<float> &v_rms, int nx, int nt, float dx, float dt)
+{
+    //基于Theta-T关系式的时间-空间域（CMP）动校正
+    //参数说明：
+    //      seis_xt           : 地震数据
+    //      seis_xt_interp    : 插值后的地震数据
+    //      seis_xt_after_nmo : 动校正后的剖面
+    arma::Mat<float> t_xt_norm(nt, nx, fill::zeros);
+    arma::Mat<float> t_xt_nmo(nt, nx, fill::zeros);
+    arma::Mat<float> seis_xt_interp;
+
+    //X_T域道集加密
+    cout << "     CMP Matrix Interpolation" << endl;
+    {
+        float x_interp_times = 50;
+        float t_interp_times = 1;
+        arma::fvec x = regspace<fvec>(0, nx - 1);
+        arma::fvec y = regspace<fvec>(0, nt - 1);
+
+        arma::fvec xi = regspace<fvec>(0, 1.0 / x_interp_times, nx - 1);
+        arma::fvec yi = regspace<fvec>(0, 1.0 / t_interp_times, nt - 1);
+
+        interp2(x, y, seis_xt, xi, yi, seis_xt_interp);
+    }
+
+    int nx_interp = seis_xt_interp.n_cols;
+    int nt_interp = seis_xt_interp.n_rows;
+    float dx_interp = nx * 1.0 / nx_interp * dx;
+    float dt_interp = nt * 1.0 / nt_interp * dt;
+
+
+    for (int ix = 0; ix < nx; ix++)
+    {
+        for (int it = 0; it < nt; it++)
+        {
+            //X-T域    ：  A1（t，x）
+            //Theta-T域：  B1（theta，t’）    ：A1（t，x）在ThetaT域对应的点
+            //Theta-T域：  B2（theta，t’’）   ：B1（theta，t’）在Theta-T域对应的NMO点
+            //X-T域    ：  A2（x’，t’’’）     ：B2（theta，t’’）在XT域对应的点
+
+
+            float v=v_rms(it);
+
+            //cout << "       Step1: choose A1(t,x)" << endl;
+            //Step1: 选择 A1（t，x）
+            float a1_x=(ix - nx / 2) * dx;
+            float a1_t= it * dt;
+            //A1（t，x）对应的a1_t0
+            float a1_t0=sqrt(a1_t*a1_t-4.0*a1_x*a1_x*1.0/v*1.0/v);
+            for(int iv_ir=0; iv_ir<100; iv_ir++)
+            {
+                if(int(a1_t0*1.0/dt)>=0 && int(a1_t0*1.0/dt)<nt)
+                {
+                    v=v_rms(int(a1_t0*1.0/dt));
+                }
+                a1_t0=sqrt(a1_t*a1_t-4.0*a1_x*a1_x*1.0/v*1.0/v);
+            }
+
+            //cout << "       Step2: Change to B1(theta,t')" << endl;
+            //Step2：变换到B1（theta，t’)
+            float b1_theta=atan(a1_x*1.0/(v*a1_t0*1.0/2));
+            float b1_t=a1_t0*1.0/cos(b1_theta);
+
+            //cout << "       Step3: Calculate B2(theta,t'')" << endl;
+            //Step3：寻找 B2（theta，t’’）
+            float b2_theta=b1_theta;
+            float b2_t=b1_t*1.0/cos(b2_theta);
+            //B2（theta，t’)对应的b2_t0
+            float b2_t0=b2_t*cos(b2_theta);
+
+            //cout << "       Step4: Reverse to A2(x',t''')" << endl;
+            //Step4：反变换到A2（x’，t’’’）
+            if(int(b2_t0*1.0/dt)<nt && int(b2_t0*1.0/dt)>=0)
+            {
+                v=v_rms(int(b2_t0*1.0/dt));
+            }
+            float a2_x=tan(b2_theta)*v*b2_t0*1.0/2;
+            float a2_t=sqrt(b2_t0*b2_t0+4.0*a2_x*a2_x*1.0/v*1.0/v);
+
+            //cout << "       Step5: Calculate ix & it of A2(x',t''')" << endl;
+            //Step5：插值求出A2（x’，t’’’）的坐标(a2_it, a2_ix)
+            float max_sup_t = a2_t * 1.0 / dt_interp;
+            float p_t = (int(max_sup_t * 1000000) % 1000000) * 1.0 / 1000000;
+            float q_t = 1 - p_t;
+
+            float max_sup_x = a2_x * 1.0 / dx_interp +nx_interp/2;
+            float p_x = (int(max_sup_x * 1000000) % 1000000) * 1.0 / 1000000;
+            float q_x = 1 - p_x;
+
+            int a2_it_interp = int(max_sup_t);
+            int a2_ix_interp = int(max_sup_x);
+            if (a2_it_interp + 1 < nt_interp && a2_it_interp>=0 &&
+                    a2_ix_interp +1 <nx_interp && a2_ix_interp >= 0)
+            {
+                seis_xt_after_nmo(it, ix) =
+                    p_t *
+                    (p_x * seis_xt_interp(a2_it_interp,a2_ix_interp) +
+                     q_x * seis_xt_interp(a2_it_interp, a2_ix_interp + 1)) +
+                    q_t *
+                    (p_x * seis_xt_interp(a2_it_interp + 1, a2_ix_interp) +
+                     q_x * seis_xt_interp(a2_it_interp + 1, a2_ix_interp + 1));
+            }
+        }
+    }
+
+    return 0;
+}
 
 
 

@@ -114,7 +114,7 @@ int generate_cmpgathers_modelbased_func(arma::Mat<float> &seis_xt, arma::Col<flo
         float dz, int nvz,
         int nx, int nt, float dx, float dt)
 {
-        //时间-空间域剖面（CMP）合成（基于褶积运算）
+        //时间-空间域剖面（CMP）合成（模型出发）
         //参数说明：
         //      ref_cof_xt :反射系数矩阵
         //      seis_xt    :合成地震记录（CMP）
@@ -173,7 +173,7 @@ int generate_thetatgathers_modelbased_func(arma::Mat<float> &seis_thetat,
         float dz, int nvz, float d_theta,
         int n_theta, int nt,float dt)
 {
-        //Theta-T合成（基于褶积运算）
+        //Theta-T合成（模型出发）
         //参数说明：
         //      ref_cof_thetat :反射系数矩阵
 
@@ -229,7 +229,7 @@ int generate_cmpgathers_zerooffset_modelbased_func(arma::Mat<float> &seis_xt_zer
         float dz, int nvz,
         int nx, int nt, float dt)
 {
-        //零偏移距时间-空间域剖面（CMP）合成（基于褶积运算）
+        //零偏移距时间-空间域剖面（CMP）合成（模型出发）
         //参数说明：
         //      ref_cof_xt :反射系数矩阵
         //      seis_xt    :合成地震记录（CMP）
@@ -286,7 +286,7 @@ int generate_thetatgathers_zerotheta_modelbased_func(arma::Mat<float> &seis_thet
         float dz, int nvz,
         int n_theta, int nt,float dt)
 {
-        //零角度Theta-T合成（基于褶积运算）
+        //零角度Theta-T合成（模型出发）
         //参数说明：
         //      ref_cof_thetat :反射系数矩阵
 
