@@ -334,3 +334,66 @@ int generate_thetatgathers_zerotheta_modelbased_func(arma::Mat<float> &seis_thet
     return 0;
 }
 
+
+
+int generate_cmpgathers_zerooffset_pilot_trace_based_func(
+        arma::Mat<float> &seis_xt_zerooffset,
+        arma::Col<float> &model,arma::Col<float> &v_rms,
+        arma::Col<float> &wavelet, int nw,
+        float dz, int nvz, int pilottrace,
+        int nx, int nt, float dx, float dt)
+{
+        //零偏移距时间-空间域剖面pilot trace处（CMP）合成（模型出发）
+        //参数说明：
+        //      ref_cof_xt :反射系数矩阵
+        //      seis_xt    :合成地震记录（CMP）
+
+        arma::Mat<float> ref_cof_xt(nt, nx, fill::zeros);
+        arma::Col<float> ref_location(nvz,fill::zeros);
+        arma::Col<float> ref_location_t0(nvz,fill::zeros);
+        int n_ref=0;
+        float x_pilottrace=(pilottrace-nx/2)*dx;
+
+        for(int ivz=0; ivz<nvz-1; ivz++)
+        {
+            if(model(ivz+1) -model(ivz) > 100)
+            {
+                ref_location(n_ref)=(ivz+1)*dz;
+                n_ref++;
+            }
+        }
+        for (int ir = 0; ir < n_ref; ir++)
+        {
+            for (int ivz = 0; ivz < ref_location(ir) / dz; ivz++)
+            {
+                ref_location_t0(ir) = ref_location_t0(ir) + dz * 1.0 / model(ivz);
+            }
+            float t0_temp=ref_location_t0(ir);
+            float v=v_rms(int(t0_temp*1.0/dt));
+            ref_location_t0(ir)=sqrt(t0_temp*t0_temp
+                    +4.0*x_pilottrace*x_pilottrace*1.0/v*1.0/v);
+        }
+
+
+        for (int ir = 0; ir < n_ref; ir++)
+        {
+            for (int ix = 0; ix < nx; ix++)
+            {
+                float t0_temp = ref_location_t0(ir);
+                float t = t0_temp;
+                int it = int(t / dt) + nw / 2;
+                if (it < nt)
+                {
+                    ref_cof_xt(it, ix) = 1;
+                }
+            }
+        }
+        for (int ix = 0; ix < nx; ix++)
+        {
+            arma::Col<float> vec_temp = conv(ref_cof_xt.col(ix), wavelet);
+            seis_xt_zerooffset.col(ix) = vec_temp(span(nw - 1, nt + nw - 2));
+        }
+
+
+    return 0;
+}

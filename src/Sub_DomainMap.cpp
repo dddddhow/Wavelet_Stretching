@@ -45,13 +45,11 @@ int xt_to_thetat_func(arma::Mat<float> &seis_xt, arma::Mat<float> &seis_thetat,
     int n_theta = nx;
     float theta_max = atan(tan(80*3.1415926/180));
     float d_theta = theta_max * 1.0 / ((n_theta - 1) / 2);
-    cout << "         Theta max is      : " << theta_max << " radians";
-    cout << " : " << theta_max * 180 * 1.0 / 3.1415926 << " degrees" << endl;
-    cout << "         D_Theta  is       : " << d_theta << " radinans";
-    cout << " : " << d_theta * 180 * 1.0 / 3.1415926 << " degrees" << endl;
+    DEBUG_PRINTF_("         Theta max is: %f  degrees\n",theta_max * 180 * 1.0 / 3.1415926 );
+    DEBUG_PRINTF_("         D_theta is  : %f  degrees\n",d_theta * 180 * 1.0 / 3.1415926 );
 
     //CMP道集加密
-    cout << "     CMP Matrix Interpolation" << endl;
+    DEBUG_PRINTF_("     CMP Matrix Interpolation\n");
     arma::Mat<float> seis_xt_interp;
     {
         float x_interp_times = 50;
@@ -71,12 +69,12 @@ int xt_to_thetat_func(arma::Mat<float> &seis_xt, arma::Mat<float> &seis_thetat,
     float dx_interp = nx * 1.0 / nx_interp * dx;
     float dt_interp = nt * 1.0 / nt_interp * dt;
 
-    cout << "         The NX of Interpolated CMP is :" << nx_interp << endl;
-    cout << "         The dx of Interpolated CMP is :" << dx_interp << " m" << endl;
-    cout << "         The NT of Interpolated CMP is :" << nt_interp << endl;
-    cout << "         The dt of Interpolated CMP is :" << dt_interp << " s" << endl;
+    DEBUG_PRINTF_("         The NX of Interpolated CMP is %d\n",nx_interp);
+    DEBUG_PRINTF_("         The dx of Interpolated CMP is %f m\n",dx_interp);
+    DEBUG_PRINTF_("         The NT of Interpolated CMP is %d\n",nt_interp);
+    DEBUG_PRINTF_("         The dt of Interpolated CMP is %f s\n",dt_interp);
 
-    cout << "     Here We Transform CMP Gathers to Theta-T Gathers" << endl;
+    DEBUG_PRINTF_("     Transform CMP Gathers to Theta-T Gathers\n");
     for (int it = 0; it < nt; it++)
     {
         for (int i_theta = 0; i_theta < n_theta; i_theta++)
@@ -131,7 +129,7 @@ int thetat_to_xt_func(arma::Mat<float> &seis_thetat, arma::Mat<float> &seis_xt,
     //Theta-T域数据转换为X-T域
 
     //Theta-T道集加密
-    cout << "       Theta-T Matrix Interpolation" << endl;
+    DEBUG_PRINTF_("     Theta_T Matrix Interpolation\n");
     arma::Mat<float> seis_thetat_interp;
     {
         float theta_interp_times = 50;
@@ -150,12 +148,12 @@ int thetat_to_xt_func(arma::Mat<float> &seis_thetat, arma::Mat<float> &seis_xt,
     float dtheta_interp = nx * 1.0 / ntheta_interp * d_theta;
     float dt_interp = nt * 1.0 / nt_interp * dt;
 
-    cout << "         The Nthetaof Interpolated Theta-T is :" << ntheta_interp << endl;
-    cout << "         The dtheta of Interpolated  Theta-T is :" << dtheta_interp << " m" << endl;
-    cout << "         The NT of Interpolated Theta-T is :" << nt_interp << endl;
-    cout << "         The dt of Interpolated Theta-T is :" << dt_interp << " s" << endl;
+    DEBUG_PRINTF_("         The Ntheta of Interpolated ThetaTGathers is %d\n",ntheta_interp);
+    DEBUG_PRINTF_("         The dtheta of Interpolated ThetaTGathers is %f degrees\n",dtheta_interp*180.0/3.1415926);
+    DEBUG_PRINTF_("         The NT of Interpolated ThetaTGathers is %d\n",nt_interp);
+    DEBUG_PRINTF_("         The dt of Interpolated ThetaTGathers is %f s\n",dt_interp);
 
-    cout << "     Here We Transform Theta-T Gathers to CMP Gathers" << endl;
+    DEBUG_PRINTF_("     Transform Theta_T Gathers to CMP Gathers\n");
 
     for (int it = 0; it < nt; it++)
     {
@@ -218,7 +216,7 @@ int thetat_afternmo_to_xt_func(arma::Mat<float> &seis_thetat_afternmo, arma::Mat
     //Theta-T域数据转换为X-T域
 
     //Theta-T道集加密
-    cout << "       Theta-T Matrix Interpolation" << endl;
+    DEBUG_PRINTF_("     Theta_T Matrix Interpolation\n");
     arma::Mat<float> seis_thetat_interp;
     {
         float theta_interp_times = 50;
@@ -237,12 +235,12 @@ int thetat_afternmo_to_xt_func(arma::Mat<float> &seis_thetat_afternmo, arma::Mat
     float dtheta_interp = nx * 1.0 / ntheta_interp * d_theta;
     float dt_interp = nt * 1.0 / nt_interp * dt;
 
-    cout << "         The Nthetaof Interpolated Theta-T is :" << ntheta_interp << endl;
-    cout << "         The dtheta of Interpolated  Theta-T is :" << dtheta_interp << " m" << endl;
-    cout << "         The NT of Interpolated Theta-T is :" << nt_interp << endl;
-    cout << "         The dt of Interpolated Theta-T is :" << dt_interp << " s" << endl;
+    DEBUG_PRINTF_("         The Ntheta of Interpolated ThetaTGathers is %d\n",ntheta_interp);
+    DEBUG_PRINTF_("         The dtheta of Interpolated ThetaTGathers is %f degrees\n",dtheta_interp*180.0/3.1415926);
+    DEBUG_PRINTF_("         The NT of Interpolated ThetaTGathers is %d\n",nt_interp);
+    DEBUG_PRINTF_("         The dt of Interpolated ThetaTGathers is %f s\n",dt_interp);
 
-    cout << "     Here We Transform Theta-T Gathers to CMP Gathers" << endl;
+    DEBUG_PRINTF_("     Transform Theta_T Gathers to CMP Gathers\n");
 
     for (int it = 0; it < nt; it++)
     {

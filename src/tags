@@ -1,0 +1,60 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BACK	Makefile	/^BACK   =$(BackDir)\/$(Projn)_back_$(Date).tgz$/;"	kind:macro	language:Make
+BackDir	Makefile	/^BackDir=~\/$/;"	kind:macro	language:Make
+Back_Content	Makefile	/^Back_Content=$(shell basename $(shell pwd))$/;"	kind:macro	language:Make
+BinDir	Makefile	/^BinDir =.$/;"	kind:macro	language:Make
+CObj	Makefile	/^CObj   =$(addprefix $(ObjDir)\/,$(CObj0))$/;"	kind:macro	language:Make
+CObj0	Makefile	/^CObj0  =$(patsubst %.c,%.o,${CSrc})$/;"	kind:macro	language:Make
+CPP_CMPL	Makefile	/^CPP_CMPL=$(CPP_CMPL_0) -O3 -std=c++11$/;"	kind:macro	language:Make
+CPP_CMPL_0	Makefile	/^CPP_CMPL_0=icpc$/;"	kind:macro	language:Make
+CPP_CMPL_FLAG	Makefile	/^CPP_CMPL_FLAG = -fmax-errors=5 -DARMA_ALLOW_FAKE_GCC$/;"	kind:macro	language:Make
+CSrc	Makefile	/^CSrc   =$(wildcard *.c)$/;"	kind:macro	language:Make
+C_CMPL	Makefile	/^C_CMPL  =icc -O3$/;"	kind:macro	language:Make
+C_CMPL_FLAG	Makefile	/^C_CMPL_FLAG   = -Wno-unused-result$/;"	kind:macro	language:Make
+CppObj	Makefile	/^CppObj =$(addprefix $(ObjDir)\/,$(CppObj0))$/;"	kind:macro	language:Make
+CppObj0	Makefile	/^CppObj0=$(patsubst %.cpp,%.o,${CppSrc})$/;"	kind:macro	language:Make
+CppSrc	Makefile	/^CppSrc =$(wildcard *.cpp)$/;"	kind:macro	language:Make
+Date	Makefile	/^Date=$(shell date +%F_time%H)$/;"	kind:macro	language:Make
+EXE	Makefile	/^EXE    =$(BinDir)\/$(Projn).e$/;"	kind:macro	language:Make
+F77Obj	Makefile	/^F77Obj =$(addprefix $(ObjDir)\/,$(F77Obj0))$/;"	kind:macro	language:Make
+F77Obj0	Makefile	/^F77Obj0=$(patsubst %.f,%.o,${F77Src})$/;"	kind:macro	language:Make
+F77Src	Makefile	/^F77Src =$(wildcard *.f)$/;"	kind:macro	language:Make
+F90Obj	Makefile	/^F90Obj =$(addprefix $(ObjDir)\/,$(F90Obj0))$/;"	kind:macro	language:Make
+F90Obj0	Makefile	/^F90Obj0=$(patsubst %.f90,%.o,${F90Src})$/;"	kind:macro	language:Make
+F90Src	Makefile	/^F90Src =$(wildcard *.f90)$/;"	kind:macro	language:Make
+F_CMPL	Makefile	/^F_CMPL  =gfortran	-O3 -cpp$/;"	kind:macro	language:Make
+F_CMPL_FLAG	Makefile	/^F_CMPL_FLAG   =$/;"	kind:macro	language:Make
+IncDir	Makefile	/^IncDir =..\/lib$/;"	kind:macro	language:Make
+LINKER	Makefile	/^LINKER  =$(CPP_CMPL)$/;"	kind:macro	language:Make
+LINKER_FLAG	Makefile	/^LINKER_FLAG   =$/;"	kind:macro	language:Make
+LINKLIBS	Makefile	/^LINKLIBS	  = -lm -larmadillo$/;"	kind:macro	language:Make
+LibDir	Makefile	/^LibDir =..\/lib$/;"	kind:macro	language:Make
+OBJ	Makefile	/^OBJ    =$(CObj) $(CppObj) $(F90Obj) $(F77Obj)$/;"	kind:macro	language:Make
+ObjDir	Makefile	/^ObjDir =..\/obj$/;"	kind:macro	language:Make
+Projn	Makefile	/^Projn   =a_out$/;"	kind:macro	language:Make
+divider	Makefile	/^divider="--------------------------------------------------------------------------------"$/;"	kind:macro	language:Make
+ex_tar	Makefile	/^ex_tar ="--exclude=*.sw? --exclude=*.log --exclude=*.[oe]"$/;"	kind:macro	language:Make
+generate_cmpgathers_func	Sub_GenerateGathers.cpp	/^int generate_cmpgathers_func(arma::Mat<float> &seis_xt, arma::Col<float> &v_rms,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_xt, arma::Col<float> &v_rms, arma::Col<float> &wavelet, int nw, int nx, int nt, float dx, float dt , float t0)
+generate_cmpgathers_modelbased_func	Sub_GenerateGathers.cpp	/^int generate_cmpgathers_modelbased_func(arma::Mat<float> &seis_xt, arma::Col<float> &v_rms,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_xt, arma::Col<float> &v_rms, arma::Col<float> &model, arma::Col<float> &wavelet, int nw, float dz, int nvz, int nx, int nt, float dx, float dt)
+generate_cmpgathers_zerooffset_modelbased_func	Sub_GenerateGathers.cpp	/^int generate_cmpgathers_zerooffset_modelbased_func(arma::Mat<float> &seis_xt_zerooffset,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_xt_zerooffset, arma::Col<float> &model, arma::Col<float> &wavelet, int nw, float dz, int nvz, int nx, int nt, float dt)
+generate_cmpgathers_zerooffset_pilot_trace_based_func	Sub_GenerateGathers.cpp	/^int generate_cmpgathers_zerooffset_pilot_trace_based_func($/;"	kind:function	language:C++	signature:( arma::Mat<float> &seis_xt_zerooffset, arma::Col<float> &model,arma::Col<float> &v_rms, arma::Col<float> &wavelet, int nw, float dz, int nvz, int pilottrace, int nx, int nt, float dx, float dt)
+generate_thetatgathers_func	Sub_GenerateGathers.cpp	/^int generate_thetatgathers_func(arma::Mat<float> &seis_thetat, arma::Col<float> &v_rms,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_thetat, arma::Col<float> &v_rms, arma::Col<float> &wavelet, int nw, int nx, int nt, float dx, float dt , float t0, float h)
+generate_thetatgathers_modelbased_func	Sub_GenerateGathers.cpp	/^int generate_thetatgathers_modelbased_func(arma::Mat<float> &seis_thetat,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_thetat, arma::Col<float> &model, arma::Col<float> &wavelet, int nw, float dz, int nvz, float d_theta, int n_theta, int nt,float dt)
+generate_thetatgathers_zerotheta_modelbased_func	Sub_GenerateGathers.cpp	/^int generate_thetatgathers_zerotheta_modelbased_func(arma::Mat<float> &seis_thetat_zerotheta,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_thetat_zerotheta, arma::Col<float> &model, arma::Col<float> &wavelet, int nw, float dz, int nvz, int n_theta, int nt,float dt)
+main	main.cpp	/^int main(int argc, char **argv)$/;"	kind:function	language:C++	signature:(int argc, char **argv)
+printpar_func	Sub_ParameterCardIO.cpp	/^int printpar_func(Parameter &par)$/;"	kind:function	language:C++	signature:(Parameter &par)
+readpar_func	Sub_ParameterCardIO.cpp	/^int readpar_func(const string &fn_par, Parameter &par)$/;"	kind:function	language:C++	signature:(const string &fn_par, Parameter &par)
+rickerwavelet_func	Sub_RickerWavelet.cpp	/^double rickerwavelet_func(int nw, float dt, arma::Col<float> &signal)$/;"	kind:function	language:C++	signature:(int nw, float dt, arma::Col<float> &signal)
+thetat_afternmo_to_xt_func	Sub_DomainMap.cpp	/^int thetat_afternmo_to_xt_func(arma::Mat<float> &seis_thetat_afternmo, arma::Mat<float> &seis_xt,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_thetat_afternmo, arma::Mat<float> &seis_xt, arma::Col<float> &v_rms, int nx, int n_theta, int nt, int dx, float d_theta, int dz, float dt)
+thetat_nmo_func	Sub_NMO.cpp	/^int thetat_nmo_func( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat_after_nmo,$/;"	kind:function	language:C++	signature:( arma::Mat<float> &seis_thetat,arma::Mat<float> &seis_thetat_after_nmo, arma::Col<float> &v_rms, int nx, int n_theta, int nt, float dx, float d_theta, float dt)
+thetat_nmo_xtbased_func	Sub_NMO.cpp	/^int thetat_nmo_xtbased_func( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo,$/;"	kind:function	language:C++	signature:( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo, arma::Col<float> &v_rms, int nx, int n_theta, int nt, float dx, float dt, float d_theta)
+thetat_to_xt_func	Sub_DomainMap.cpp	/^int thetat_to_xt_func(arma::Mat<float> &seis_thetat, arma::Mat<float> &seis_xt,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_thetat, arma::Mat<float> &seis_xt, arma::Col<float> &v_rms, int nx, int n_theta, int nt, int dx, float d_theta, int dz, float dt)
+xt_nmo_func	Sub_NMO.cpp	/^int xt_nmo_func( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo,$/;"	kind:function	language:C++	signature:( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo, arma::Col<float> &v_rms, int nx, int nt, float dx, float dt)
+xt_nmo_pilot_trace_based_func	Sub_NMO.cpp	/^int xt_nmo_pilot_trace_based_func(arma::Mat<float> &seis_xt, arma::Mat<float> &seis_xt_after_nmo,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_xt, arma::Mat<float> &seis_xt_after_nmo, arma::Col<float> &v_rms, int nx, int nt, float dx, float dt, int pilottrace)
+xt_nmo_thetatbased_func	Sub_NMO.cpp	/^int xt_nmo_thetatbased_func( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo,$/;"	kind:function	language:C++	signature:( arma::Mat<float> &seis_xt,arma::Mat<float> &seis_xt_after_nmo, arma::Col<float> &v_rms, int nx, int nt, float dx, float dt)
+xt_to_thetat_func	Sub_DomainMap.cpp	/^int xt_to_thetat_func(arma::Mat<float> &seis_xt, arma::Mat<float> &seis_thetat,$/;"	kind:function	language:C++	signature:(arma::Mat<float> &seis_xt, arma::Mat<float> &seis_thetat, arma::Col<float> &v_rms, int nx, int nt, int dx, int dz, float dt)

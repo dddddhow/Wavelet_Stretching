@@ -23,10 +23,9 @@
 using namespace std;
 using namespace arma;
 
-int ReadPar_func(const string &fn_par, Parameter &par)
+int readpar_func(const string &fn_par, Parameter &par)
 {
     auto Par = &par;
-    //TJ_NMO_Ana_Par *Par = (TJ_NMO_Ana_Par *)calloc(1,sizeof(TJ_NMO_Ana_Par));
     int LineCount = 0;
     FILE *fp = fopen(fn_par.c_str(), "r");
     if (fp == NULL)
@@ -55,65 +54,49 @@ int ReadPar_func(const string &fn_par, Parameter &par)
         switch (LineCount)
         {
             case 1:
-                sscanf(line, "%s", Par->fn_cmp_in);
+                sscanf(line, "%s", Par->fn_path_of_model_in);
                 break;
             case 2:
-                sscanf(line, "%s", Par->fn_cmp_out);
+                sscanf(line, "%s", Par->fn_path_of_v_rms_in);
                 break;
             case 3:
-                sscanf(line, "%s", Par->fn_RadonSpectrum);
+                sscanf(line, "%s", Par->fn_path_of_output);
                 break;
             case 4:
-                sscanf(line, "%s", Par->fn_tvpairs);
+                sscanf(line, "%d  %d %f %f", &Par->nvx, &Par->nvz, &Par->dx, &Par->dz);
                 break;
             case 5:
-                sscanf(line, "%d %f", &Par->nt, &Par->dt);
+                sscanf(line, "%d %d %f", &Par->nx, &Par->nt, &Par->dt);
                 break;
             case 6:
-                sscanf(line, "%d %f %f", &Par->nx, &Par->offset_min, &Par->doffset);
-                break;
-            case 7:
-                sscanf(line, "%d %f %f", &Par->nv, &Par->v_min, &Par->dv);
-                break;
-            case 8:
-                sscanf(line, "%f", &Par->freq_max);
-                break;
-            case 9:
-                sscanf(line, "%d", &Par->taper_length);
-                break;
-            case 10:
-                sscanf(line, "%f %f", &Par->perc_under, &Par->perc_over);
-                break;
-            case 11:
-                sscanf(line, "%d", &Par->Nthd);
+                sscanf(line, "%d", &Par->nw);
                 break;
         }
     }
+
+    fclose(fp);
+    return 0;
 }
+
+
+
 
 /*
  * Print Par
  */
-int PrintPar_func(Parameter &par)
+int printpar_func(Parameter &par)
 {
     auto Par = &par;
     printf("======================================================================\n");
-    printf("***** PrintPar :   *****\n");
+    printf("PrintPar : \n");
     // primary par
-    printf("* 1  fn_cmp_in         = %s \n", Par->fn_cmp_in);
-    printf("* 2  fn_cmp_out        = %s \n", Par->fn_cmp_out);
-    printf("* 3  fn_RadonSpectrum  = %s \n", Par->fn_RadonSpectrum);
-    printf("* 4  fn_tvpairs        = %s \n", Par->fn_tvpairs);
-    printf("* 5  nt= %d \t,dt    = %f \n", Par->nt, Par->dt);
-    printf("* 6  nx= %d \t,offmin= %f ,doff= %f\n", Par->nx, Par->offset_min, Par->doffset);
-    printf("* 7  nv= %d \t,v_min = %f ,dv  = %f\n", Par->nv, Par->v_min, Par->dv);
-    printf("* 8  freq_max       = %f \n", Par->freq_max);
-    printf("* 9  taper_length   = %d \n", Par->taper_length);
-    printf("* 10 perc_under=%f ,perc_over=%f\n", Par->perc_under, Par->perc_over);
-    // secondary par
-    printf("* Num of thread     = %d \n", Par->Nthd);
-
-    printf("***** RadonDeMulti_PrintPar END *****\n");
+    printf("* 1  Path of model     : %s \n", Par->fn_path_of_model_in);
+    printf("* 2  Path of V_rms     : %s \n", Par->fn_path_of_v_rms_in);
+    printf("* 3  Path of Output    : %s \n", Par->fn_path_of_output);
+    printf("* 5  Model Size        : (nvz,nvx) -> (%d,%d)\n", Par->nvz, Par->nvx);
+    printf("* 6  V_rms Size        : (nt,nx)   -> (%d,%d)\n", Par->nt, Par->nx);
+    printf("* 7  Sample Interval   : (dz,dx,dt)-> (%f m,%f m,%f s)\n",Par->dz, Par->dx, Par->dt);
+    printf("* 8  Number of Wavelet : %d \n", Par->nw);
     printf("======================================================================\n");
     return 0;
 }
