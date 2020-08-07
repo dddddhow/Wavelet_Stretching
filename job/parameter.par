@@ -1,0 +1,16 @@
+********************************
+**** 1: Path of Model(velocity)
+../data/model_nz400_nx200.dat
+**** 2: Path of V_rms
+../data/vrms_nt2000_nx200.dat
+**** 3: MainPath of Output
+../file/
+**** 4: nvx nvz dx dz (size of model)
+200  400  5.0  5.0
+**** 5: nx nt dt(size of sigle CMP)
+201  2000  0.001
+**** 6: nw (Parameters of Wavelet)
+81
+************** end ***************************
+
+
